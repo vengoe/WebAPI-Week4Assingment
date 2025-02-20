@@ -23,6 +23,8 @@ db.once("open", () => {
   console.log("Connected to MongoDB Database");
 });
 
+//random junk to save the repo
+
 */
 // Middleware to serve static files
 app.use(express.static(path.join(__dirname, "public")));
