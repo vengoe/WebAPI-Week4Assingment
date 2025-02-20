@@ -10,7 +10,7 @@ const User = require("./models/User");
 const { register } = require("module");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.port || 3000;
 
 
 /*// MongoDB connection setup
@@ -41,6 +41,14 @@ app.use(session({
   cookie:{secure:false}// Set to true is using https
 }));
 
+// Authentication middleware
+function isAuthenticated(req, res, next) {
+  if (req.session.user) {
+    return next();
+  }
+  return res.redirect("/login");
+}
+
 //MongoDB connection setup
 const mongoURI = process.env.MONGODB_URI;//"mongodb://localhost:27017/crudapp";
 mongoose.connect(mongoURI);
@@ -55,13 +63,7 @@ db.once("open", ()=>{
 
 
 
-// Authentication middleware
-function isAuthenticated(req, res, next) {
-  if (req.session.user) {
-    return next();
-  }
-  return res.redirect("/login");
-}
+
 
 
 
