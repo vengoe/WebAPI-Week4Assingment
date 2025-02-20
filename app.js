@@ -24,6 +24,20 @@ db.once("open", () => {
 });
 
 */
+// Middleware to serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
+// Middleware to parse JSON requests
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
+//sets up the session variable
+app.use(session({
+  secret:process.env.SESSION_SECRET,
+  resave:false,
+  saveUninitialized:false,
+  cookie:{secure:false}// Set to true is using https
+}));
 
 //MongoDB connection setup
 const mongoURI = process.env.MONGODB_URI;//"mongodb://localhost:27017/crudapp";
@@ -36,22 +50,8 @@ db.once("open", ()=>{
     console.log("Connected to MongoDB Database");
 });
 
-// Middleware to serve static files
-app.use(express.static(path.join(__dirname, "public")));
 
-// Middleware to parse JSON requests
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Session setup
-app.use(
-  session({
-    secret: "12345",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }, // Set to true if using HTTPS
-  })
-);
 
 // Authentication middleware
 function isAuthenticated(req, res, next) {
