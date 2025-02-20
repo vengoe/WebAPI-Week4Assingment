@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -6,11 +7,13 @@ const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const FavoriteThings = require("./models/FavoriteThings");
 const User = require("./models/User");
+const { register } = require("module");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// MongoDB connection setup
+
+/*// MongoDB connection setup
 const mongoURI = "mongodb://localhost:27017/crudapp";
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -18,6 +21,19 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error"));
 db.once("open", () => {
   console.log("Connected to MongoDB Database");
+});
+
+*/
+
+//MongoDB connection setup
+const mongoURI = process.env.MONGODB_URI;//"mongodb://localhost:27017/crudapp";
+mongoose.connect(mongoURI);
+
+const db = mongoose.connection;
+
+db.on("error", console.error.bind(console, "MongoDB connection error"));
+db.once("open", ()=>{
+    console.log("Connected to MongoDB Database");
 });
 
 // Middleware to serve static files
@@ -171,3 +187,5 @@ app.delete("/deletefavoritething/:id", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+module.exports = app;
